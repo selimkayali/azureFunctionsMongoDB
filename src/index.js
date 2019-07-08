@@ -6,15 +6,21 @@ module.exports = async function(context, req) {
   let dbUsername = '';
   let dbPassword = '';
   let response;
-  const uri = `mongodb+srv://${dbUsername}:${dbPassword}@cluster0-ysdpk.mongodb.net/test?retryWrites=true&w=majority`;
+  let limit = 999999;
+  //const uri = `mongodb+srv://${dbUsername}:${dbPassword}@cluster0-ysdpk.mongodb.net/test?retryWrites=true&w=majority`;  //MongoDB Atlas
+  const uri = `mongodb://${dbUsername}:${dbPassword}@ds040309.mlab.com:40309/${dbName}`; // MLab
+
   let client = await mongodb.MongoClient.connect(uri, {
     useNewUrlParser: true
   });
   let collection = await client.db(dbName).collection(collectionName);
   if (req.method === 'GET') {
+    if (req.query.limit && parseInt(req.query.limit) > 0) {
+      limit = parseInt(req.query.limit);
+    }
     response = await collection
       .find()
-      .limit(10)
+      .limit(limit)
       .toArray();
   } else if (req.method === 'POST') {
     let res = await collection.insertOne(req.body);
@@ -26,6 +32,9 @@ module.exports = async function(context, req) {
     });
   }
   context.res = {
+    headers: {
+      'content-type': 'application/json'
+    },
     body: JSON.stringify(response)
   };
 };
