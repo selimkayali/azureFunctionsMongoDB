@@ -5,10 +5,10 @@ module.exports = async function(context, req) {
   if (req.query.test && req.query.test === 'true') {
     response = 'OK';
   } else {
-    let dbName = 'azurefunc';
-    let collectionName = 'test';
-    let dbUsername = 'selimkayali';
-    let dbPassword = 'a123123';
+    let dbName = '';
+    let collectionName = '';
+    let dbUsername = '';
+    let dbPassword = '';
 
     let limit = 999999;
     //const uri = `mongodb+srv://${dbUsername}:${dbPassword}@cluster0-ysdpk.mongodb.net/test?retryWrites=true&w=majority`;  //MongoDB Atlas
